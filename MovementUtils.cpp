@@ -3,10 +3,8 @@
 //
 
 #include <vector>
-#include <queue>
 #include "MovementUtils.h"
 #include "MathUtils.h"
-#include "DebugUtils.h"
 
 /**
  * Is Target Position inside the map?
@@ -110,6 +108,13 @@ std::pair<int,int> MovementUtils::CanGoDown(std::pair<int,int> Position,
     }
 }
 
+/**
+ *
+ * @param node A Current node (cell)
+ * @param Map  The map with obstacles
+ * @param MapDimensions The w,h dimensions
+ * @return A vector of positions
+ */
 std::vector<std::pair<int, int>> MovementUtils::GetNeighbours(std::pair<int, int> node, const std::vector<bool>& Map,
                                                              std::pair<int, int> MapDimensions) {
     std::vector<std::pair<int, int>> res;
@@ -132,7 +137,9 @@ std::vector<std::pair<int, int>> MovementUtils::GetNeighbours(std::pair<int, int
     return res;
 }
 
-
+/**
+ * Some unit tests...
+ */
 void MovementUtils::Test() {
     assert(MovementUtils::IsOutsideMap(std::pair(9,9),std::pair(10,10)) == false);
     assert(MovementUtils::IsOutsideMap(std::pair(0,0),std::pair(10,10)) == false);

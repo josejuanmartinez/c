@@ -1,8 +1,6 @@
 #include <vector>
-#include <queue>
 #include "MathUtils.h"
 #include "MovementUtils.h"
-#include "DebugUtils.h"
 #include <algorithm>
 
 bool FindPath(std::pair<int, int> Start,
@@ -125,6 +123,8 @@ bool FindPath(std::pair<int, int> Start,
     return true;
 }
 
+/** TESTING SCENARIOS
+
 bool test_path_0() {
     std::vector<int> OutPath;
     const int& quad = 9;
@@ -155,9 +155,31 @@ void test_path_2() {
     assert(OutPath.empty());
 }
 
+
+void test_path_3() {
+    std::vector<bool> Map = {1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 ,1 ,1};
+    std::vector<int> OutPath;
+    assert(FindPath({0, 0}, {3, 3}, Map, {4, 4}, OutPath));
+    std::vector<int> Expected = {4, 8, 12, 13, 14, 15};
+    for(int i=0;i<OutPath.size();i++) {
+        // std::cout << OutPath[i] << " " << Expected[i] << "\n";
+        assert(OutPath[i] == Expected[i]);
+    }
+}
+
+void test_path_4() {
+    std::vector<bool> Map = {1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0 ,1 ,1};
+    std::vector<int> OutPath;
+    assert(!FindPath({0, 0}, {3, 3}, Map, {4, 4}, OutPath));
+    assert(OutPath.empty());
+}
+
 int main() {
     //MathUtils::Test();
     //MovementUtils::Test();
     test_path_1();
     test_path_2();
+    test_path_3();
+    test_path_4();
 }
+**/

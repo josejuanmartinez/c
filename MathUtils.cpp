@@ -44,6 +44,9 @@ std::pair<int,int> MathUtils::LookTo(std::pair<int,int> Source, std::pair<int,in
     return {Target.first - Source.first, Target.second - Target.first};
 }
 
+/**
+ * Some unit tests...
+ */
 void MathUtils::Test() {
         assert(MathUtils::Transpose(std::pair(1,2),std::pair(10,10)) == 21);
         assert(MathUtils::Transpose(std::pair(3,5),std::pair(10,10)) == 53);
