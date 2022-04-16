@@ -11,14 +11,15 @@
 
 class MovementUtils {
     public:
-        static std::vector<std::pair<int, int>> GetNeighbours(std::pair<int, int> node, const std::vector<bool> &Map, std::pair<int, int> MapDimensions);
-        static bool IsOutsideMap(std::pair<int,int>, std::pair<int, int>);
-        static bool CanMoveTo (std::pair<int,int>, const std::vector<bool>& Map, std::pair<int, int>);
-        static std::pair<int,int> CanGoRight(std::pair<int,int>, const std::vector<bool>& Map, std::pair<int, int>);
-        static std::pair<int,int> CanGoUp(std::pair<int,int>, const std::vector<bool>& Map, std::pair<int, int>);
-        static std::pair<int,int> CanGoLeft(std::pair<int,int>, const std::vector<bool>& Map, std::pair<int, int>);
-        static std::pair<int,int> CanGoDown(std::pair<int,int>, const std::vector<bool>& Map, std::pair<int, int>);
-        static void Test();
+        static std::vector<int> GetNeighbours(const int& node, const std::vector<bool> &Map,
+                                              const std::pair<int, int>& MapDimensions);
+        static bool IsOutsideMap(const std::pair<int,int>&, const std::pair<int, int>&);
+        static bool CanMoveTo (const std::pair<int,int>&, const std::vector<bool>& Map, const std::pair<int, int>&);
+        static int CanGoRight(const std::pair<int,int>&, const std::vector<bool>& Map, const std::pair<int, int>&);
+        static int CanGoUp(const std::pair<int,int>&, const std::vector<bool>& Map, const std::pair<int, int>&);
+        static int CanGoLeft(const std::pair<int,int>&, const std::vector<bool>& Map, const std::pair<int, int>&);
+        static int CanGoDown(const std::pair<int,int>&, const std::vector<bool>& Map, const std::pair<int, int>&);
+        // static void Test();
 };
 
 

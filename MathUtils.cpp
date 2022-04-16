@@ -28,10 +28,23 @@
  * @param MapDimensions Max width and height
  * @return int
  */
-int MathUtils::Transpose(std::pair<int,int> Position, std::pair<int, int> MapDimensions) {
-        int res = MapDimensions.first * Position.second + Position.first;
+int MathUtils::Transpose(const std::pair<int,int>& Position, const std::pair<int, int>& MapDimensions) {
+        return MapDimensions.first * Position.second + Position.first;
         // std::cerr << "(" << Position.first << "," << Position.second << ")=" << res << "\n";
-        return res;
+        //return res;
+}
+
+/**
+ * Transforms 1D into 2D position
+ * @param Node Current position in a 1D arrow
+ * @param MapDimensions Max width and height
+ * @return int
+ */
+std::pair<int, int> MathUtils::Untranspose(const int& Node, const std::pair<int, int>& MapDimensions) {
+    return { Node % MapDimensions.first, static_cast<int>(Node / MapDimensions.first) };
+    // return MapDimensions.first * Position.second + Position.first;
+    // std::cerr << "(" << Position.first << "," << Position.second << ")=" << res << "\n";
+    //return res;
 }
 
 /***
@@ -40,6 +53,7 @@ int MathUtils::Transpose(std::pair<int,int> Position, std::pair<int, int> MapDim
  * @param Target Where do I need to go?
  * @return Vector pointing from source to target
  */
+
 std::pair<int,int> MathUtils::LookTo(std::pair<int,int> Source, std::pair<int,int> Target) {
     return {Target.first - Source.first, Target.second - Target.first};
 }
@@ -47,9 +61,22 @@ std::pair<int,int> MathUtils::LookTo(std::pair<int,int> Source, std::pair<int,in
 /**
  * Some unit tests...
  */
+
 void MathUtils::Test() {
-        assert(MathUtils::Transpose(std::pair(1,2),std::pair(10,10)) == 21);
-        assert(MathUtils::Transpose(std::pair(3,5),std::pair(10,10)) == 53);
-        assert(MathUtils::Transpose(std::pair(0,0),std::pair(10,10)) == 0);
-        assert(MathUtils::Transpose(std::pair(9,9),std::pair(10,10)) == 99);
+    assert(MathUtils::Transpose(std::pair(1,2),std::pair(10,10)) == 21);
+    assert(MathUtils::Transpose(std::pair(3,5),std::pair(10,10)) == 53);
+    assert(MathUtils::Transpose(std::pair(0,0),std::pair(10,10)) == 0);
+    assert(MathUtils::Transpose(std::pair(9,9),std::pair(10,10)) == 99);
+
+    std::pair<int,int> a = MathUtils::Untranspose(4,std::pair(4,4));
+    assert(a.first == 0 && a.second == 1);
+
+    a = MathUtils::Untranspose(9,std::pair(4,4));
+    assert(a.first == 1 && a.second == 2);
+
+    a = MathUtils::Untranspose(10,std::pair(4,4));
+    assert(a.first == 2 && a.second == 2);
+
+    a = MathUtils::Untranspose(0,std::pair(4,4));
+    assert(a.first == 0 && a.second == 0);
 }

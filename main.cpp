@@ -2,6 +2,7 @@
 #include "MathUtils.h"
 #include "MovementUtils.h"
 #include <algorithm>
+#include "DebugUtils.h"
 
 bool FindPath(std::pair<int, int> Start,
               std::pair<int, int> Target,
@@ -32,36 +33,40 @@ bool FindPath(std::pair<int, int> Start,
         return false;
     }
 
+    // I work with ints
+    int iStart = MathUtils::Transpose(Start, MapDimensions);
+    int iTarget = MathUtils::Transpose(Target, MapDimensions);
+
     // NON-EDGE CASES:
     // ==========
 
     // Initialization of distances and closest-node matrix
     std::vector<int> distances (MapDimensions.first * MapDimensions.second, -1);
-    std::vector<std::pair<int, int>> closest (MapDimensions.first * MapDimensions.second, {-1, -1});
+    std::vector<int> closest (MapDimensions.first * MapDimensions.second, -1);
     distances[0] = 0;
 
     // Initialization of queues and closest-node matrix
     // toVisit is a queue, I only need to add and remove, not search or insert/delete in the middle
-    std::vector<std::pair<int, int>> toVisit;
+    std::vector<int> toVisit;
     // visited: I need to check if a node is already visited, so I transverse all the array, It can not be a queue
-    std::vector<std::pair<int, int>> visited;
+    std::vector<int> visited;
 
     // This is an optimization: If I see I'm going further than an already found path, I will skip
     int foundDistance = INT16_MAX;
 
     // START
     // First, we push the beginning to 'toVisit'
-    toVisit.push_back(Start);
+    toVisit.push_back(MathUtils::Transpose(Start, MapDimensions));
 
     while(!toVisit.empty()) {
         // I take one available node, remove it from toVisit and add it to visited
-        std::pair<int, int> popped = toVisit.back();
+        int popped = toVisit.back();
         toVisit.pop_back();
         visited.push_back(popped);
         // DebugUtils::PrintPosition(popped, "Exploring", 1);
 
         // I retrieve  the accumulated (shorted) cost to reach the popped node
-        int popped_distance = distances[MathUtils::Transpose(popped, MapDimensions)];
+        int popped_distance = distances[popped];
 
         // Optimization: If this is taking longer than other finished paths, I skip it
         if (popped_distance >= foundDistance) {
@@ -69,28 +74,28 @@ bool FindPath(std::pair<int, int> Start,
         }
 
         // I get its neighbours
-        std::vector<std::pair<int,int>> neighbors = MovementUtils::GetNeighbours(popped, Map, MapDimensions);
+        std::vector<int> neighbors = MovementUtils::GetNeighbours(popped, Map, MapDimensions);
 
         // I check the distances from the node to the neighbours
-        for(std::pair<int,int> neighbor: neighbors) {
+        for(int neighbor: neighbors) {
             // DebugUtils::PrintPosition(neighbor, "Neighbour", 2);
             // I get the new distance
             int new_distance = popped_distance + 1;
             // std::cout << "--New distance: " << new_distance << "\n";
-            int neighbor_distance = distances[MathUtils::Transpose(neighbor, MapDimensions)];
+            int neighbor_distance = distances[neighbor];
             // If the distance is smaller than other ways or it's first time, I update it as the shortest path and update the closest node
             if (new_distance < neighbor_distance || neighbor_distance == -1) {
-                int transposedNeighbour = MathUtils::Transpose(neighbor, MapDimensions);
-                distances[transposedNeighbour] = new_distance;
-                closest[transposedNeighbour] = popped;
+                //int transposedNeighbour = MathUtils::Transpose(neighbor, MapDimensions);
+                distances[neighbor] = new_distance;
+                closest[neighbor] = popped;
                 // std::cout << "--- Shorter path: "  << new_distance << " vs. "<< neighbor_distance << "\n";
             }
             // else {
             //     std::cout << "--- Non-sorther path: "  << new_distance << " vs. "<< neighbor_distance << "\n";
             // }
             // If I found the Target, I check if this distance is shorter to ignore other future longer paths
-            if (neighbor == Target && foundDistance > new_distance) {
-                foundDistance = distances[MathUtils::Transpose(neighbor, MapDimensions)];
+            if (neighbor == iTarget && foundDistance > new_distance) {
+                foundDistance = distances[neighbor];
             }
             // I add the node to be visited if it was not visited already
             // I CAN VISIT NODES SEVERAL TIMES!!!
@@ -106,36 +111,23 @@ bool FindPath(std::pair<int, int> Start,
     //DebugUtils::PrintClosest(closest, MapDimensions);
     //std::cout << "\n";
 
-    std::pair<int, int> next = Target;
-    std::pair<int, int> start = {0, 0};
-    while(next != start) {
-        if (next.first == -1 and next.second == -1) {
+    // I reconstruct the path from the Target to the Source using the closest nodes
+    int next = iTarget;
+    while(next != iStart) {
+        if (next == -1) {
             OutPath = std::vector<int>();
             return false;
         }
         //DebugUtils::PrintPosition(next, "Closest", 1);
-        int pos = MathUtils::Transpose(next, MapDimensions);
-        OutPath.push_back(pos);
-        next = closest[pos];
+        OutPath.push_back(next);
+        next = closest[next];
     }
     std::reverse(OutPath.begin(), OutPath.end());
 
     return true;
 }
 
-/** TESTING SCENARIOS
-
-bool test_path_0() {
-    std::vector<int> OutPath;
-    const int& quad = 9;
-    return FindPath(
-            std::pair(0,0),
-            std::pair(quad-1,quad-1),
-            std::vector<bool>(quad*quad, true),
-            std::pair(quad,quad),
-            OutPath
-    );
-}
+/** TESTING SCENARIOS **/
 
 void test_path_1() {
     std::vector<bool> Map = {1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1};
@@ -162,7 +154,7 @@ void test_path_3() {
     assert(FindPath({0, 0}, {3, 3}, Map, {4, 4}, OutPath));
     std::vector<int> Expected = {4, 8, 12, 13, 14, 15};
     for(int i=0;i<OutPath.size();i++) {
-        // std::cout << OutPath[i] << " " << Expected[i] << "\n";
+        //std::cout << OutPath[i] << " " << Expected[i] << "\n";
         assert(OutPath[i] == Expected[i]);
     }
 }
@@ -177,9 +169,8 @@ void test_path_4() {
 int main() {
     //MathUtils::Test();
     //MovementUtils::Test();
-    test_path_1();
-    test_path_2();
-    test_path_3();
-    test_path_4();
+    //test_path_1();
+    //test_path_2();
+    //test_path_3();
+    //test_path_4();
 }
-**/

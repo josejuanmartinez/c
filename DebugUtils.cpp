@@ -12,7 +12,7 @@
  * @param name
  * @param indent
  */
-void DebugUtils::PrintPosition(std::pair<int, int> Position, const std::string& name, int indent) {
+void DebugUtils::PrintPosition(const std::pair<int, int>& Position, const std::string& name, const int& indent) {
     std::cout << std::string(indent, '-') << name << ": (" << Position.first << "," << Position.second << ")" << "\n";
 }
 
@@ -20,7 +20,7 @@ void DebugUtils::PrintPosition(std::pair<int, int> Position, const std::string& 
  * Prints just the position
  * @param Position
  */
-void DebugUtils::PrintPositionSlim(std::pair<int, int> Position) {
+void DebugUtils::PrintPositionSlim(const std::pair<int, int>& Position) {
     std::cout << "(" << Position.first << "," << Position.second << ")";
 }
 
@@ -30,7 +30,7 @@ void DebugUtils::PrintPositionSlim(std::pair<int, int> Position) {
  * @param j
  * @param distance
  */
-void DebugUtils::PrintDistance(int i, int j, int distance) {
+void DebugUtils::PrintDistance(const int& i, const int& j, const int& distance) {
     std::cout << "(" << i << "," << j << ")=" << distance <<" ";
 }
 
@@ -39,7 +39,7 @@ void DebugUtils::PrintDistance(int i, int j, int distance) {
  * @param distances
  * @param MapDimensions
  */
-void DebugUtils::PrintDistances(std::vector<int> distances, std::pair<int, int> MapDimensions) {
+void DebugUtils::PrintDistances(const std::vector<int>& distances, const std::pair<int, int>& MapDimensions) {
     for (int j=MapDimensions.second-1;j>=0;j--) {
         for (int i=0;i<MapDimensions.first;i++) {
             int distance = distances[MathUtils::Transpose({i, j}, MapDimensions)];
@@ -54,10 +54,11 @@ void DebugUtils::PrintDistances(std::vector<int> distances, std::pair<int, int> 
  * @param closests
  * @param MapDimensions
  */
-void DebugUtils::PrintClosest(std::vector<std::pair<int, int>> closests, std::pair<int, int> MapDimensions) {
+void DebugUtils::PrintClosest(const std::vector<int>& closests, const std::pair<int, int>& MapDimensions) {
     for (int j=MapDimensions.second-1;j>=0;j--) {
         for (int i=0;i<MapDimensions.first;i++) {
-            std::pair<int, int> closest = closests[MathUtils::Transpose({i, j}, MapDimensions)];
+            int iClosest = closests[MathUtils::Transpose({i, j}, MapDimensions)];
+            std::pair<int, int> closest = MathUtils::Untranspose(iClosest, MapDimensions);
             DebugUtils::PrintPositionSlim({i,j});
             std::cout << "=";
             DebugUtils::PrintPositionSlim(closest);

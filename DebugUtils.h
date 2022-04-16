@@ -9,11 +9,11 @@
 
 class DebugUtils {
     public:
-        static void PrintPosition(std::pair<int,int>, const std::string&, int);
-        static void PrintDistance(int, int, int);
-        static void PrintDistances(std::vector<int>, std::pair<int, int>);
-        static void PrintClosest(std::vector<std::pair<int, int>>, std::pair<int, int>);
-        static void PrintPositionSlim(std::pair<int, int>);
+        static void PrintPosition(const std::pair<int,int>&, const std::string&, const int&);
+        static void PrintDistance(const int&, const int&, const int&);
+        static void PrintDistances(const std::vector<int>&, const std::pair<int, int>&);
+        static void PrintClosest(const std::vector<int>&, const std::pair<int, int>&);
+        static void PrintPositionSlim(const std::pair<int, int>&);
 };
 
 
