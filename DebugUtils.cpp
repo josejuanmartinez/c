@@ -12,8 +12,9 @@
  * @param name
  * @param indent
  */
-void DebugUtils::PrintPosition(const std::pair<int, int>& Position, const std::string& name, const int& indent) {
-    std::cout << std::string(indent, '-') << name << ": (" << Position.first << "," << Position.second << ")" << "\n";
+void DebugUtils::PrintPosition(const int& Position, const std::string& name, const int& indent, const std::pair<int, int>& MapDimensions) {
+    std::pair<int,int> pPosition = MathUtils::Untranspose(Position, MapDimensions);
+    std::cout << std::string(indent, '-') << name << ": (" << pPosition.first << "," << pPosition.second << ")" << "\n";
 }
 
 /**
@@ -67,3 +68,11 @@ void DebugUtils::PrintClosest(const std::vector<int>& closests, const std::pair<
         std::cout << "\n";
     }
 }
+
+void DebugUtils::PrintDistancesAndClosest(const std::vector<int>& distances, const std::vector<int>& closest, const std::pair<int, int>& MapDimensions) {
+    DebugUtils::PrintDistances(distances, MapDimensions);
+    std::cout << "\n";
+    DebugUtils::PrintClosest(closest, MapDimensions);
+    std::cout << "\n";
+}
+
