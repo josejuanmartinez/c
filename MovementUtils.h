@@ -19,7 +19,7 @@ class MovementUtils {
         static int CanGoUp(const std::pair<int,int>&, const std::vector<bool>& Map, const std::pair<int, int>&);
         static int CanGoLeft(const std::pair<int,int>&, const std::vector<bool>& Map, const std::pair<int, int>&);
         static int CanGoDown(const std::pair<int,int>&, const std::vector<bool>& Map, const std::pair<int, int>&);
-        // static void Test();
+        static void Test();
 };
 
 

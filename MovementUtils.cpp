@@ -141,11 +141,10 @@ std::vector<int> MovementUtils::GetNeighbours(const int& node, const std::vector
 /**
  * Some unit tests...
  */
-/*void MovementUtils::Test() {
+void MovementUtils::Test() {
     assert(MovementUtils::IsOutsideMap(std::pair(9,9),std::pair(10,10)) == false);
     assert(MovementUtils::IsOutsideMap(std::pair(0,0),std::pair(10,10)) == false);
     assert(MovementUtils::IsOutsideMap(std::pair(10,0),std::pair(10,10)) == true);
     assert(MovementUtils::IsOutsideMap(std::pair(0,10),std::pair(10,10)) == true);
     assert(MovementUtils::IsOutsideMap(std::pair(10,10),std::pair(10,10)) == true);
 }
-*/

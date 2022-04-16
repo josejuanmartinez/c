@@ -43,7 +43,7 @@ bool FindPath(std::pair<int, int> Start,
     // Initialization of distances and closest-node matrix
     std::vector<int> distances (MapDimensions.first * MapDimensions.second, -1);
     std::vector<int> closest (MapDimensions.first * MapDimensions.second, -1);
-    distances[0] = 0;
+    distances[iStart] = 0;
 
     // Initialization of queues and closest-node matrix
     // toVisit is a queue, I only need to add and remove, not search or insert/delete in the middle
@@ -106,10 +106,10 @@ bool FindPath(std::pair<int, int> Start,
             }
         }
     }
-    //DebugUtils::PrintDistances(distances, MapDimensions);
-    //std::cout << "\n";
-    //DebugUtils::PrintClosest(closest, MapDimensions);
-    //std::cout << "\n";
+    /*DebugUtils::PrintDistances(distances, MapDimensions);
+    std::cout << "\n";
+    DebugUtils::PrintClosest(closest, MapDimensions);
+    std::cout << "\n";*/
 
     // I reconstruct the path from the Target to the Source using the closest nodes
     int next = iTarget;
@@ -118,7 +118,7 @@ bool FindPath(std::pair<int, int> Start,
             OutPath = std::vector<int>();
             return false;
         }
-        //DebugUtils::PrintPosition(next, "Closest", 1);
+        //DebugUtils::PrintPosition(MathUtils::Untranspose(next, MapDimensions), "Closest", 1);
         OutPath.push_back(next);
         next = closest[next];
     }
@@ -128,7 +128,7 @@ bool FindPath(std::pair<int, int> Start,
 }
 
 /** TESTING SCENARIOS **/
-
+// Paradox example 1
 void test_path_1() {
     std::vector<bool> Map = {1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1};
     std::vector<int> OutPath;
@@ -140,6 +140,7 @@ void test_path_1() {
     }
 }
 
+// Paradox example 2
 void test_path_2() {
     std::vector<bool> Map = {0, 0, 1, 0, 1, 1, 1, 0, 1};
     std::vector<int> OutPath;
@@ -147,7 +148,7 @@ void test_path_2() {
     assert(OutPath.empty());
 }
 
-
+// 4x4
 void test_path_3() {
     std::vector<bool> Map = {1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 ,1 ,1};
     std::vector<int> OutPath;
@@ -159,6 +160,7 @@ void test_path_3() {
     }
 }
 
+// 4x4 blocked col 1
 void test_path_4() {
     std::vector<bool> Map = {1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0 ,1 ,1};
     std::vector<int> OutPath;
@@ -166,11 +168,90 @@ void test_path_4() {
     assert(OutPath.empty());
 }
 
-int main() {
-    //MathUtils::Test();
-    //MovementUtils::Test();
-    //test_path_1();
-    //test_path_2();
-    //test_path_3();
-    //test_path_4();
+// 5x5 starts from 0,0
+void test_path_5() {
+    std::vector<bool> Map = {1, 0, 1, 1, 1,
+                             1, 0, 0, 0, 1,
+                             1, 1, 1, 1, 1,
+                             1, 1, 0, 0, 1,
+                             1, 1, 0, 1, 1};
+    std::vector<int> OutPath;
+    assert(FindPath({0, 0}, {3, 4}, Map, {5, 5}, OutPath));
+    std::vector<int> Expected = { 5, 10, 11, 12, 13, 14, 19, 24, 23};
+    for(int i=0;i<OutPath.size();i++) {
+        //std::cout << OutPath[i] << " " << Expected[i] << "\n";
+        assert(OutPath[i] == Expected[i]);
+    }
 }
+
+// 5x5 starts reverse way
+void test_path_5r() {
+    std::vector<bool> Map = {1, 0, 1, 1, 1,
+                             1, 0, 0, 0, 1,
+                             1, 1, 1, 1, 1,
+                             1, 1, 0, 0, 1,
+                             1, 1, 0, 1, 1};
+    std::vector<int> OutPath;
+    assert(FindPath({3, 4}, {0, 0}, Map, {5, 5}, OutPath));
+    std::vector<int> Expected = { 24, 19, 14, 13, 12, 11, 10, 5, 0};
+    for(int i=0;i<OutPath.size();i++) {
+        //std::cout << OutPath[i] << " " << Expected[i] << "\n";
+        assert(OutPath[i] == Expected[i]);
+    }
+}
+
+// 5x5 starts from 0,2
+void test_path_6() {
+    std::vector<bool> Map = {1, 0, 1, 1, 1,
+                             1, 0, 0, 0, 1,
+                             1, 1, 1, 1, 1,
+                             1, 1, 0, 0, 1,
+                             1, 1, 0, 1, 1};
+    std::vector<int> OutPath;
+    assert(FindPath({0, 2}, {3, 4}, Map, {5, 5}, OutPath));
+    std::vector<int> Expected = { 11, 12, 13, 14, 19, 24, 23};
+    for(int i=0;i<OutPath.size();i++) {
+        //std::cout << OutPath[i] << " " << Expected[i] << "\n";
+        assert(OutPath[i] == Expected[i]);
+    }
+}
+
+// 5x5 blocked row 1
+void test_path_7() {
+    std::vector<bool> Map = {1, 0, 1, 1, 1,
+                             0, 0, 0, 0, 0,
+                             1, 1, 1, 1, 1,
+                             1, 1, 0, 0, 1,
+                             1, 1, 0, 1, 1};
+    std::vector<int> OutPath;
+    assert(!FindPath({0, 0}, {3, 4}, Map, {5, 5}, OutPath));
+    assert(OutPath.empty());
+}
+
+// Same location
+void test_path_8() {
+    std::vector<bool> Map = {1, 0, 1, 1, 1,
+                             0, 0, 0, 0, 0,
+                             1, 1, 1, 1, 1,
+                             1, 1, 0, 0, 1,
+                             1, 1, 0, 1, 1};
+    std::vector<int> OutPath;
+    assert(FindPath({0, 0}, {0, 0}, Map, {5, 5}, OutPath));
+    assert(OutPath.empty());
+}
+
+/*
+int main() {
+    MathUtils::Test();
+    MovementUtils::Test();
+    test_path_1();
+    test_path_2();
+    test_path_3();
+    test_path_4();
+    test_path_5();
+    test_path_5r();
+    test_path_6();
+    test_path_7();
+    test_path_8();
+}
+*/
