@@ -61,6 +61,52 @@ bool FindPath::ShortestPath(std::pair<int, int> Start,
 
     // I store {node, score}
     toVisit.emplace_back(popped, 0);
+
+    //GREEDY APPROACH: I TRY TO FIND IT ALL STRAIGHT IN X AND THEN IN Y
+    bool bRight = Start.first < Target.first;
+    int iX = Start.first;
+    int greedy_distance = distances[iStart];
+    for(; iX<Target.first;) {
+
+        std::pair<int,int> tr_neighbor = {iX+1, Start.second};
+        if (!MovementUtils::CanMoveTo(tr_neighbor, Map, MapDimensions)) {
+            break;
+        }
+
+        int neighbor = MathUtils::Transpose(tr_neighbor, MapDimensions);
+        distances[neighbor] = ++greedy_distance;
+        closest[neighbor] = popped;
+        toVisit.emplace_back(neighbor, MathUtils::ManhattanDistance(tr_neighbor, Target) - MathUtils::ManhattanDistance(tr_neighbor, Target));
+        if (bRight)
+            iX++;
+        else
+            iX--;
+        popped = neighbor;
+        bRight = iX < Target.first;
+    }
+    bool bUp = Start.second < Target.second;
+    int iY = Start.second;
+    for(; iY<Target.second;) {
+        std::pair<int,int> tr_neighbor = {iX, iY+1};
+        if (!MovementUtils::CanMoveTo(tr_neighbor, Map, MapDimensions)) {
+            break;
+        }
+        int neighbor = MathUtils::Transpose(tr_neighbor, MapDimensions);
+        distances[neighbor] = ++greedy_distance;
+        closest[neighbor] = popped;
+        toVisit.emplace_back(neighbor, MathUtils::ManhattanDistance(tr_neighbor, Target) - MathUtils::ManhattanDistance(tr_neighbor, Target));
+        if (bUp)
+            iY++;
+        else
+            iY--;
+        popped = neighbor;
+        bUp = iY< Target.second;
+    }
+
+    if(iX == Target.first && iY == Target.second) {
+        return FindPath::RecreatePath(iStart, iTarget, closest, OutPath);
+    }
+
     while(!toVisit.empty()) {
         // I take one available node, remove it from toVisit and add it to visited
         int popped_pos = MovementUtils::GetClosestCandidate(toVisit, MapDimensions);
@@ -141,19 +187,21 @@ bool FindPath::ShortestPath(std::pair<int, int> Start,
         }
     }
     //DebugUtils::PrintDistancesAndClosest(distances, closest, MapDimensions);
+    return FindPath::RecreatePath(iStart, iTarget, closest, OutPath);
+}
 
+bool FindPath::RecreatePath(const int& iStart, const int &iTarget, const std::vector<int>& closest, std::vector<int>& OutPath) {
     // I reconstruct the path from the Target to the Source using the closest nodes
     int next = iTarget;
     while(next != iStart) {
         if (next == -1) {
-            OutPath = std::vector<int>();
-            return false;
-        }
-        //DebugUtils::PrintPosition(MathUtils::Untranspose(next, MapDimensions), "Closest", 1);
-        OutPath.push_back(next);
-        next = closest[next];
+        OutPath = std::vector<int>();
+        return false;
+    }
+    //DebugUtils::PrintPosition(MathUtils::Untranspose(next, MapDimensions), "Closest", 1);
+    OutPath.push_back(next);
+    next = closest[next];
     }
     std::reverse(OutPath.begin(), OutPath.end());
-
     return true;
 }

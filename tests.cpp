@@ -357,7 +357,7 @@ void test_path_25() {
                              1,1,1,1,1};
     std::vector<int> OutPath;
     assert(FindPath::ShortestPath({1, 2}, {4, 4}, Map, {5, 5}, OutPath));
-    std::vector<int> Expected = { 16, 21, 22, 23, 24};
+    std::vector<int> Expected = { 12, 17, 22, 23, 24};
     for(int i=0;i<OutPath.size();i++) {
         //std::cerr << OutPath[i] << " " << Expected[i] << "\n";
         assert(OutPath[i] == Expected[i]);
@@ -456,6 +456,28 @@ void test_path_30() {
     }
 }
 
+// From top right to bottom left
+void test_path_31() {
+    std::vector<int> Map = {1,1,1,1,1,1,1,1,1,1,
+                            1,1,1,1,1,1,1,1,1,1,
+                            1,1,1,1,1,1,1,1,1,1,
+                            1,1,1,1,1,1,1,1,1,1,
+                            1,1,1,1,1,1,1,1,1,1,
+                            1,1,1,1,1,1,1,1,1,1,
+                            1,1,1,1,1,1,1,1,1,1,
+                            1,1,1,1,1,1,1,1,1,1,
+                            1,1,1,1,1,1,1,1,1,1,
+                            1,1,1,1,1,1,1,1,1,1};
+
+    std::vector<int> OutPath;
+    assert(FindPath::ShortestPath({0, 0}, {5, 5}, Map, {10, 10}, OutPath));
+    std::vector<int> Expected = {1,2,3,4,5, 15, 25, 35, 45, 55};
+    for(int i=0;i<OutPath.size();i++) {
+        //std::cerr << OutPath[i] << " " << Expected[i] << "\n";
+        assert(OutPath[i] == Expected[i]);
+    }
+}
+
 int main() {
     struct timeval start{}, end{};
     // start timer.
@@ -496,6 +518,7 @@ int main() {
     test_path_25();
     test_path_30();
     test_path_29();
+    test_path_31();
     gettimeofday(&end, nullptr);
     double time_taken;
 

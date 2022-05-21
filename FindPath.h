@@ -14,6 +14,8 @@ public:
                              const std::vector<int>& Map,
                              std::pair<int, int> MapDimensions,
                              std::vector<int>& OutPath);
+    static bool RecreatePath(const int& iStart, const int &iTarget, const std::vector<int>& closest,
+                             std::vector<int>& OutPath);
 };
 
 
