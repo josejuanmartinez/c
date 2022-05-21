@@ -45,8 +45,8 @@ bool MovementUtils::CanMoveTo (const std::pair<int,int>& Position,
  * @return int
  */
 int MovementUtils::CanGoRight(const std::pair<int,int>& Position,
-                               const std::vector<int>& Map,
-                               const std::pair<int, int>& MapDimensions) {
+                              const std::vector<int>& Map,
+                              const std::pair<int, int>& MapDimensions) {
     //std::pair<int,int> node = Position;
     int newPos = Position.first + 1;
     if (CanMoveTo({newPos, Position.second}, Map, MapDimensions)) {
@@ -115,7 +115,7 @@ int MovementUtils::CanGoDown(const std::pair<int,int>& Position,
         return -1;
     }
 }
-
+/*
 int MovementUtils::CanGoDownLeft(const std::pair<int,int>& Position,
                              const std::vector<int>& Map,
                              const std::pair<int, int>& MapDimensions) {
@@ -170,7 +170,7 @@ int MovementUtils::CanGoUpRight(const std::pair<int,int>& Position,
     } else {
         return -1;
     }
-}
+}*/
 
 /**
  *
@@ -179,10 +179,9 @@ int MovementUtils::CanGoUpRight(const std::pair<int,int>& Position,
  * @param MapDimensions The w,h dimensions
  * @return A vector of positions
  */
-std::vector<int> MovementUtils::GetNeighbours(const int& node, const std::vector<int>& Map,
+std::vector<int> MovementUtils::GetNeighbours(const std::pair<int,int>& Position, const std::vector<int>& Map,
                                               const std::pair<int, int>& MapDimensions) {
 
-    std::pair<int, int> Position = MathUtils::Untranspose(node, MapDimensions);
     std::vector<int> res;
     int resDown = MovementUtils::CanGoDown(Position, Map, MapDimensions);
     int resLeft = MovementUtils::CanGoLeft(Position, Map, MapDimensions);
@@ -200,12 +199,13 @@ std::vector<int> MovementUtils::GetNeighbours(const int& node, const std::vector
 }
 
 /**
-*
+* Auxiliar heuristic to check if exploring a node is a good idea depending on the surroundings
 * @param node A Current node (cell)
 * @param Map  The map with obstacles
 * @param MapDimensions The w,h dimensions
 * @return A vector of positions
 */
+/*
 int MovementUtils::GetObstacles(const std::pair<int,int>& Current, const std::vector<int>& Map,
                                               const std::pair<int, int>& MapDimensions) {
 
@@ -236,7 +236,8 @@ int MovementUtils::GetObstacles(const std::pair<int,int>& Current, const std::ve
         res++;
     return res;
 }
-
+*/
+/*
 int MovementUtils::GetScore(const std::pair<int,int>& Start, const std::pair<int,int>& Target, const std::pair<int,int>& Current, const std::pair<int, int>& MapDimensions, const std::vector<int> &Map) {
     //int distance_to_target = MathUtils::ManhattanDistance(Current, Target);    // the lesser the better!
     //int distance_to_start = -1 * MathUtils::ManhattanDistance(Current, Start); // the bigger the better!
@@ -249,9 +250,9 @@ int MovementUtils::GetScore(const std::pair<int,int>& Start, const std::pair<int
     std::cout << "--- Distance to start: " << distance_to_start << "\n";
     std::cout << "--- Penalty: " << penalty << "\n";
     std::cout << "---- All: " << all << "\n";*/
-
+/*
     return MathUtils::ManhattanDistance(Current, Target) - MathUtils::ManhattanDistance(Current, Target);
-}
+}*/
 
 /*
  * In Djikstra, we select next node to visit per the cost of visiting it. Since we costs are equal,

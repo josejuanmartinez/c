@@ -8,8 +8,8 @@
 #include <vector>
 
 class FindPath {
-    public:
-        static bool ShortestPath(std::pair<int, int> Start,
+public:
+    static bool ShortestPath(std::pair<int, int> Start,
                              std::pair<int, int> Target,
                              const std::vector<int>& Map,
                              std::pair<int, int> MapDimensions,

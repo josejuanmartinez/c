@@ -29,9 +29,9 @@
  * @return int
  */
 int MathUtils::Transpose(const std::pair<int,int>& Position, const std::pair<int, int>& MapDimensions) {
-        return MapDimensions.first * Position.second + Position.first;
-        // std::cerr << "(" << Position.first << "," << Position.second << ")=" << res << "\n";
-        //return res;
+    return MapDimensions.first * Position.second + Position.first;
+    // std::cerr << "(" << Position.first << "," << Position.second << ")=" << res << "\n";
+    //return res;
 }
 
 /**
@@ -72,7 +72,7 @@ int MathUtils::ManhattanDistance(std::pair<int,int> Node, std::pair<int, int> Ta
 // Driver function to sort the vector elements
 // by second element of pairs
 bool MathUtils::sortbysec(const std::pair<int,int> &a,
-               const std::pair<int,int> &b)
+                          const std::pair<int,int> &b)
 {
     return (a.second < b.second);
 }
