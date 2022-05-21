@@ -15,6 +15,8 @@ class MathUtils {
         static int Transpose(const std::pair<int,int>&, const std::pair<int, int>&);
         static std::pair<int,int> Untranspose(const int&, const std::pair<int, int>&);
         static std::pair<int,int> LookTo(std::pair<int,int>, std::pair<int, int>);
+        static int ManhattanDistance(std::pair<int,int>, std::pair<int, int>);
+        static bool sortbysec(const std::pair<int,int>&, const std::pair<int,int> &);
         static void Test();
 };
 

@@ -59,6 +59,25 @@ std::pair<int,int> MathUtils::LookTo(std::pair<int,int> Source, std::pair<int,in
 }
 
 /**
+ * Calculates distance in a grid between two points. Used to have a greedy estimator to the best node to visit
+ * @param Node
+ * @param Target
+ * @return int (Manhattan Distance)
+ */
+int MathUtils::ManhattanDistance(std::pair<int,int> Node, std::pair<int, int> Target) {
+    return abs(Target.first - Node.first) + abs(Target.second - Node.second);
+}
+
+
+// Driver function to sort the vector elements
+// by second element of pairs
+bool MathUtils::sortbysec(const std::pair<int,int> &a,
+               const std::pair<int,int> &b)
+{
+    return (a.second < b.second);
+}
+
+/**
  * Some unit tests...
  */
 

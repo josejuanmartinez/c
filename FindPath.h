@@ -11,7 +11,7 @@ class FindPath {
     public:
         static bool ShortestPath(std::pair<int, int> Start,
                              std::pair<int, int> Target,
-                             const std::vector<bool>& Map,
+                             const std::vector<int>& Map,
                              std::pair<int, int> MapDimensions,
                              std::vector<int>& OutPath);
 };
