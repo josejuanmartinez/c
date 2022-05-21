@@ -313,7 +313,7 @@ void test_path_22() {
                              1,1,1,1,1};
     std::vector<int> OutPath;
     assert(FindPath::ShortestPath({0, 0}, {4, 2}, Map, {5, 5}, OutPath));
-    std::vector<int> Expected = { 5, 10, 11, 16, 17, 18, 19, 14};
+    std::vector<int> Expected = { 5, 10, 15, 16, 17, 18, 19, 14};
     for(int i=0;i<OutPath.size();i++) {
         //std::cerr << OutPath[i] << " " << Expected[i] << "\n";
         assert(OutPath[i] == Expected[i]);
@@ -329,7 +329,7 @@ void test_path_23() {
                              1,1,1,1,1};
     std::vector<int> OutPath;
     assert(FindPath::ShortestPath({4, 0}, {4, 2}, Map, {5, 5}, OutPath));
-    std::vector<int> Expected = { 3,2,1,0,5, 10, 11, 16, 17, 18, 19, 14};
+    std::vector<int> Expected = { 3,2,1,0,5, 10, 15, 16, 17, 18, 19, 14};
     for(int i=0;i<OutPath.size();i++) {
         //std::cerr << OutPath[i] << " " << Expected[i] << "\n";
         assert(OutPath[i] == Expected[i]);
@@ -357,7 +357,7 @@ void test_path_25() {
                              1,1,1,1,1};
     std::vector<int> OutPath;
     assert(FindPath::ShortestPath({1, 2}, {4, 4}, Map, {5, 5}, OutPath));
-    std::vector<int> Expected = { 16, 17, 22, 23, 24};
+    std::vector<int> Expected = { 16, 21, 22, 23, 24};
     for(int i=0;i<OutPath.size();i++) {
         //std::cerr << OutPath[i] << " " << Expected[i] << "\n";
         assert(OutPath[i] == Expected[i]);
@@ -455,7 +455,7 @@ void test_path_30() {
         assert(OutPath[i] == Expected[i]);
     }
 }
-/*
+
 int main() {
     struct timeval start{}, end{};
     // start timer.
@@ -503,4 +503,4 @@ int main() {
     time_taken = (time_taken + (end.tv_usec -
                                 start.tv_usec)) * 1e-6;
     std::cerr << "Test finished " << time_taken;
-}*/
+}
