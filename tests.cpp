@@ -357,7 +357,7 @@ void test_path_25() {
                              1,1,1,1,1};
     std::vector<int> OutPath;
     assert(FindPath::ShortestPath({1, 2}, {4, 4}, Map, {5, 5}, OutPath));
-    std::vector<int> Expected = { 12, 17, 22, 23, 24};
+    std::vector<int> Expected = { 16, 21, 22, 23, 24};
     for(int i=0;i<OutPath.size();i++) {
         //std::cerr << OutPath[i] << " " << Expected[i] << "\n";
         assert(OutPath[i] == Expected[i]);

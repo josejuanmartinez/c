@@ -60,7 +60,7 @@ bool FindPath::ShortestPath(std::pair<int, int> Start,
     int popped = iStart;
 
     // I store {node, score}
-    toVisit.emplace_back(popped, 0);
+    //toVisit.emplace_back(popped, 0);
 
     //GREEDY APPROACH: I TRY TO FIND IT ALL STRAIGHT IN X AND THEN IN Y
     bool bRight = Start.first < Target.first;
@@ -76,7 +76,7 @@ bool FindPath::ShortestPath(std::pair<int, int> Start,
         int neighbor = MathUtils::Transpose(tr_neighbor, MapDimensions);
         distances[neighbor] = ++greedy_distance;
         closest[neighbor] = popped;
-        toVisit.emplace_back(neighbor, MathUtils::ManhattanDistance(tr_neighbor, Target) - MathUtils::ManhattanDistance(tr_neighbor, Target));
+        //toVisit.emplace_back(neighbor, MathUtils::ManhattanDistance(tr_neighbor, Target) - MathUtils::ManhattanDistance(tr_neighbor, Target));
         if (bRight)
             iX++;
         else
@@ -94,7 +94,7 @@ bool FindPath::ShortestPath(std::pair<int, int> Start,
         int neighbor = MathUtils::Transpose(tr_neighbor, MapDimensions);
         distances[neighbor] = ++greedy_distance;
         closest[neighbor] = popped;
-        toVisit.emplace_back(neighbor, MathUtils::ManhattanDistance(tr_neighbor, Target) - MathUtils::ManhattanDistance(tr_neighbor, Target));
+        //toVisit.emplace_back(neighbor, MathUtils::ManhattanDistance(tr_neighbor, Target) - MathUtils::ManhattanDistance(tr_neighbor, Target));
         if (bUp)
             iY++;
         else
@@ -105,6 +105,13 @@ bool FindPath::ShortestPath(std::pair<int, int> Start,
 
     if(iX == Target.first && iY == Target.second) {
         return FindPath::RecreatePath(iStart, iTarget, closest, OutPath);
+    }
+    else
+    {
+        //popped = iStart;
+        toVisit.emplace_back(iStart, 0);
+        fill(distances.begin(), distances.end(), -1);
+        fill(closest.begin(), closest.end(), -1);
     }
 
     while(!toVisit.empty()) {
