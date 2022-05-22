@@ -495,9 +495,9 @@ void test_path_32() {
        assert(OutPath[i] == Expected[i]);
     }
 }
-
+/*
 int main() {
-    /*struct timeval start{}, end{};
+    struct timeval start{}, end{};
     // start timer.
     gettimeofday(&start, nullptr);
     // sync the I/O of C and C++.
@@ -536,14 +536,14 @@ int main() {
     test_path_25();
     test_path_30();
     test_path_29();
-    test_path_31();*/
+    test_path_31();
     test_path_32();
-    /*
+
     gettimeofday(&end, nullptr);
     double time_taken;
 
     time_taken = (end.tv_sec - start.tv_sec) * 1e6;
     time_taken = (time_taken + (end.tv_usec -
                                 start.tv_usec)) * 1e-6;
-    std::cerr << "Test finished " << time_taken;*/
-}
+    std::cerr << "Test finished " << time_taken;
+}*/

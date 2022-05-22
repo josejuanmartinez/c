@@ -30,8 +30,6 @@
  */
 int MathUtils::Transpose(const std::pair<int,int>& Position, const std::pair<int, int>& MapDimensions) {
     return MapDimensions.first * Position.second + Position.first;
-    // std::cerr << "(" << Position.first << "," << Position.second << ")=" << res << "\n";
-    //return res;
 }
 
 /**
@@ -42,20 +40,6 @@ int MathUtils::Transpose(const std::pair<int,int>& Position, const std::pair<int
  */
 std::pair<int, int> MathUtils::Untranspose(const int& Node, const std::pair<int, int>& MapDimensions) {
     return { Node % MapDimensions.first, static_cast<int>(Node / MapDimensions.first) };
-    // return MapDimensions.first * Position.second + Position.first;
-    // std::cerr << "(" << Position.first << "," << Position.second << ")=" << res << "\n";
-    //return res;
-}
-
-/***
- * Returns a vector to reach Target from Source
- * @param Source Where am I?
- * @param Target Where do I need to go?
- * @return Vector pointing from source to target
- */
-
-std::pair<int,int> MathUtils::LookTo(std::pair<int,int> Source, std::pair<int,int> Target) {
-    return {Target.first - Source.first, Target.second - Target.first};
 }
 
 /**
@@ -66,15 +50,6 @@ std::pair<int,int> MathUtils::LookTo(std::pair<int,int> Source, std::pair<int,in
  */
 int MathUtils::ManhattanDistance(std::pair<int,int> Node, std::pair<int, int> Target) {
     return abs(Target.first - Node.first) + abs(Target.second - Node.second);
-}
-
-
-// Driver function to sort the vector elements
-// by second element of pairs
-bool MathUtils::sortbysec(const std::pair<int,int> &a,
-                          const std::pair<int,int> &b)
-{
-    return (a.second < b.second);
 }
 
 /**
