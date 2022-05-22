@@ -478,8 +478,26 @@ void test_path_31() {
     }
 }
 
+
+// One path, checking greedy
+void test_path_32() {
+    std::vector<int> Map = {1,1,1,0,1,
+                            1,0,1,0,1,
+                            1,0,1,0,1,
+                            1,0,1,0,1,
+                            1,0,1,1,1};
+
+    std::vector<int> OutPath;
+    assert(FindPath::ShortestPath({0, 4}, {4, 0}, Map, {5, 5}, OutPath));
+    std::vector<int> Expected = {15, 10, 5, 0,1, 2, 7, 12, 17, 22, 23, 24, 19, 14, 9, 4};
+    for(int i=0;i<OutPath.size();i++) {
+       std::cerr << OutPath[i] << " " << Expected[i] << "\n";
+       assert(OutPath[i] == Expected[i]);
+    }
+}
+
 int main() {
-    struct timeval start{}, end{};
+    /*struct timeval start{}, end{};
     // start timer.
     gettimeofday(&start, nullptr);
     // sync the I/O of C and C++.
@@ -518,12 +536,14 @@ int main() {
     test_path_25();
     test_path_30();
     test_path_29();
-    test_path_31();
+    test_path_31();*/
+    test_path_32();
+    /*
     gettimeofday(&end, nullptr);
     double time_taken;
 
     time_taken = (end.tv_sec - start.tv_sec) * 1e6;
     time_taken = (time_taken + (end.tv_usec -
                                 start.tv_usec)) * 1e-6;
-    std::cerr << "Test finished " << time_taken;
+    std::cerr << "Test finished " << time_taken;*/
 }

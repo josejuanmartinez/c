@@ -41,9 +41,6 @@ bool FindPath::ShortestPath(std::pair<int, int> Start,
     // NON-EDGE CASES:
     // ==========
 
-    // I set a max_distance to prevent the algorithm going fart
-    int MAX_DISTANCE = MathUtils::ManhattanDistance(Start, Target) * 750;
-
     // Initialization of distances and closest-node matrix
     std::vector<int> distances (MapDimensions.first * MapDimensions.second, -1);
     std::vector<int> closest (MapDimensions.first * MapDimensions.second, -1);
@@ -55,69 +52,56 @@ bool FindPath::ShortestPath(std::pair<int, int> Start,
     // visited: I need to check if a node is already visited, so I transverse all the array, It can not be a queue
     std::vector<int> visited;
 
-    // START
-    // First, we push the beginning to 'toVisit'
-    int popped = iStart;
+    // **********************************************
+    // 1) GREEDY APPROACH: PRESUPPOSING WE DON'T HAVE OBSTACLES
+    // AND WE CAN GO STRAIGHT LINE
+    // **********************************************
 
-    // I store {node, score}
-    //toVisit.emplace_back(popped, 0);
-
-    //GREEDY APPROACH: I TRY TO FIND IT ALL STRAIGHT IN X AND THEN IN Y
-    bool bRight = Start.first < Target.first;
+    // Initialization
     int iX = Start.first;
-    int greedy_distance = distances[iStart];
-    for(; iX<Target.first;) {
-
-        std::pair<int,int> tr_neighbor = {iX+1, Start.second};
-        if (!MovementUtils::CanMoveTo(tr_neighbor, Map, MapDimensions)) {
-            break;
-        }
-
-        int neighbor = MathUtils::Transpose(tr_neighbor, MapDimensions);
-        distances[neighbor] = ++greedy_distance;
-        closest[neighbor] = popped;
-        //toVisit.emplace_back(neighbor, MathUtils::ManhattanDistance(tr_neighbor, Target) - MathUtils::ManhattanDistance(tr_neighbor, Target));
-        if (bRight)
-            iX++;
-        else
-            iX--;
-        popped = neighbor;
-        bRight = iX < Target.first;
-    }
-    bool bUp = Start.second < Target.second;
     int iY = Start.second;
-    for(; iY<Target.second;) {
-        std::pair<int,int> tr_neighbor = {iX, iY+1};
-        if (!MovementUtils::CanMoveTo(tr_neighbor, Map, MapDimensions)) {
-            break;
-        }
+
+    int greedy_last = iStart;
+    while (iX != Target.first || iY != Target.second) {
+        bool bRight = iX < Target.first;
+        bool bUp = iY < Target.second;
+        std::pair<int,int> tr_neighbor = {bRight? iX+1 : iX-1 , iY};
         int neighbor = MathUtils::Transpose(tr_neighbor, MapDimensions);
-        distances[neighbor] = ++greedy_distance;
-        closest[neighbor] = popped;
-        //toVisit.emplace_back(neighbor, MathUtils::ManhattanDistance(tr_neighbor, Target) - MathUtils::ManhattanDistance(tr_neighbor, Target));
-        if (bUp)
-            iY++;
-        else
-            iY--;
-        popped = neighbor;
-        bUp = iY< Target.second;
+        if (!MovementUtils::CanMoveTo(tr_neighbor, Map, MapDimensions) || iX == Target.first) {
+            tr_neighbor = {iX, (bUp || iY==0)? iY+1 : iY -1 };
+            neighbor = MathUtils::Transpose(tr_neighbor, MapDimensions);
+            if (closest[neighbor] != -1) {
+                tr_neighbor = {iX, bUp? iY-1 : iY +1 };
+            }
+            if (!MovementUtils::CanMoveTo(tr_neighbor, Map, MapDimensions) || closest[neighbor] != -1) {
+                break;
+            }
+        }
+        closest[neighbor] = greedy_last;
+        greedy_last = neighbor;
+        iX = tr_neighbor.first;
+        iY = tr_neighbor.second;
     }
 
     if(iX == Target.first && iY == Target.second) {
+        // I could find a path with a greedy approach! Return it, saving a lot of time!
         return FindPath::RecreatePath(iStart, iTarget, closest, OutPath);
     }
     else
     {
-        //popped = iStart;
+        // I could NOT find a path with a greedy approach. Try Dijkstra
         toVisit.emplace_back(iStart, 0);
-        fill(distances.begin(), distances.end(), -1);
         fill(closest.begin(), closest.end(), -1);
     }
 
+
+    // **********************************************
+    // 2) DIJKSTRA WITH MANHATTAN DISTANCE GUIDANCE
+    // **********************************************
     while(!toVisit.empty()) {
         // I take one available node, remove it from toVisit and add it to visited
         int popped_pos = MovementUtils::GetClosestCandidate(toVisit, MapDimensions);
-        popped = toVisit[popped_pos].first; // {node}
+        int popped = toVisit[popped_pos].first; // {node}
         std::pair<int,int> utr_popped = MathUtils::Untranspose(popped, MapDimensions);
         toVisit.erase(toVisit.begin() + popped_pos);
         visited.push_back(popped);
@@ -127,10 +111,6 @@ bool FindPath::ShortestPath(std::pair<int, int> Start,
         int popped_distance = distances[popped];
         // I calculate the distance to the neighbours from the popped node
         int new_distance = popped_distance + 1;
-
-        if (new_distance >= MAX_DISTANCE) {
-            continue;
-        }
 
         // I get its neighbours
         std::vector<int> neighbors = MovementUtils::GetNeighbours(utr_popped, Map, MapDimensions);
@@ -176,10 +156,6 @@ bool FindPath::ShortestPath(std::pair<int, int> Start,
 
                 if(!bFound) {
                     // I will reduce score to those nodes already visited, but never removed because a cell can be part of many paths
-                    //if(find(visited.begin(), visited.end(), neighbor) != visited.end()) {
-                    //       distance *= 2;
-                    //}
-
                     toVisit.emplace_back(neighbor, MathUtils::ManhattanDistance(tr_neighbor, Target) - MathUtils::ManhattanDistance(tr_neighbor, Target));
                     //DebugUtils::PrintPosition(neighbor, "Adding Neighbour to list", 2, MapDimensions);
                 }
